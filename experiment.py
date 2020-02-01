@@ -59,7 +59,7 @@ def compute_loss(model, x):
     kl_div = tf.reduce_sum(logqz_x - logpz, axis=-1)
 
     # we minimize the negative evidence lower bound (nelbo)
-    nelbo = - tf.reduce_mean(logpx_z - kl_div)
+    nelbo = - tf.reduce_mean(logpx_z - FLAGS.beta * kl_div)
     return nelbo
 
 
@@ -114,6 +114,8 @@ if __name__ == "__main__":
 
     flags.DEFINE_float('learning_rate', 1e-4,
                        'Learning rate to use for training.')
+    flags.DEFINE_float('beta', 1.,
+                       'beta as in beta-VAE. Default: 1.0.')
     flags.DEFINE_integer('num_epochs', 5,
                          'Number of epochs to run training for.')
     flags.DEFINE_integer('latent_dim', 10, 'Number of latent distributions.')
